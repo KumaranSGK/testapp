@@ -4,22 +4,27 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 
 open class DataViewModel: ViewModel() {
-    private val _isamount = MutableLiveData<String>()
-    val amount: LiveData<String> = _isamount
+    private val _isamount = MutableLiveData<Boolean>()
+    val amount: LiveData<Boolean> = _isamount
 
 
-    fun Amount(userId: String) {
+    fun Amount(amount: String) {
         viewModelScope.launch {
             try {
-                _loading.value = true
-                val result = userRepository.getUser(userId)
-                _userData.value = result
+                if (!amount.isNullOrEmpty() && !amount.equals("0")) {
+                    _isamount.value = true
+                }
+                else{
+                    _isamount.value = false
+                }
+
             } catch (e: Exception) {
-                _error.value = e.message
+
             } finally {
-                _loading.value = false
+
             }
         }
     }
